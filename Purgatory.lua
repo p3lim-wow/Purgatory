@@ -112,10 +112,14 @@ Purgatory:RegisterEvent('PLAYER_TALENT_UPDATE')
 function Purgatory:PLAYER_TALENT_UPDATE()
 	if(IsSpellKnown(114556)) then
 		self:Show()
+		self:RegisterEvent('PLAYER_REGEN_ENABLED')
+		self:RegisterEvent('PLAYER_REGEN_DISABLED')
 		self:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
 		self:RegisterEvent('UNIT_AURA')
 	else
 		self:Hide()
+		self:UnregisterEvent('PLAYER_REGEN_ENABLED')
+		self:UnregisterEvent('PLAYER_REGEN_DISABLED')
 		self:UnregisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
 		self:UnregisterEvent('UNIT_AURA')
 	end
@@ -171,6 +175,18 @@ function Purgatory:COMBAT_LOG_EVENT_UNFILTERED(...)
 	end
 end
 
+function Purgatory:PLAYER_REGEN_ENABLED()
+	self:Hide()
+end
+
+function Purgatory:PLAYER_REGEN_DISABLED()
+	if(not locked) then
+		SlashCmdList.Purgatory('lock')
+	end
+
+	self:Show()
+end
+
 SLASH_Purgatory1 = '/purgatory'
 SlashCmdList.Purgatory = function(msg)
 	if(not Purgatory:IsShown()) then return end
@@ -192,6 +208,7 @@ SlashCmdList.Purgatory = function(msg)
 		if(locked) then
 			locked = false
 
+			Purgatory:Show()
 			Purgatory:EnableMouse(true)
 			Purgatory.Scaler:Show()
 			Purgatory.Details:SetText('123k 15%')
@@ -202,6 +219,7 @@ SlashCmdList.Purgatory = function(msg)
 		else
 			locked = true
 
+			Purgatory:Hide()
 			Purgatory:EnableMouse(false)
 			Purgatory.Scaler:Hide()
 			Purgatory.Details:SetText('')

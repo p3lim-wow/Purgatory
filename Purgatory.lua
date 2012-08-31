@@ -1,3 +1,5 @@
+if(select(3, UnitClass('player')) ~= 6) then return end
+
 local addonName = ...
 
 local locked = true

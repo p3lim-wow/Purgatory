@@ -1,0 +1,8 @@
+## Interface: 50001
+## Author: p3lim
+## Version: Alpha
+## Title: Purgatory
+## Notes: Purgatory debuff tracker/announcer for Death Knights. Use /purgatory to change settings.
+## SavedVariables: PurgatoryDB
+
+Purgatory.lua

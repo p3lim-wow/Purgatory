@@ -164,12 +164,8 @@ function Purgatory:COMBAT_LOG_EVENT_UNFILTERED(...)
 		if(source == PlayerGUID and spell == 116888) then
 			self.Details:SetFormattedText('%s %s%%', Abbreviate(amount), math.floor(amount / UnitHealthMax('player') * 100 + 1/2))
 
-			if(PurgatoryDB.announce) then
-				if(IsInRaid()) then
-					SendChatMessage(string.format(PurgatoryDB.message, Abbreviate(amount)), 'RAID')
-				elseif(GetNumGroupMembers() > 0) then
-					SendChatMessage(string.format(PurgatoryDB.message, Abbreviate(amount)), 'PARTY')
-				end
+			if(PurgatoryDB.announce and IsInRaid() and (UnitIsGroupAssistant('player') or UnitIsGroupLeader('player'))) then
+				SendChatMessage(string.format(PurgatoryDB.message, Abbreviate(amount)), 'RAID_WARNING')
 			end
 		end
 	end
